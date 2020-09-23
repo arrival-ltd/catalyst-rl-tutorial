@@ -1,0 +1,104 @@
+args:
+  logdir: ./logs/rl-gym-td3  #  change me
+  expdir: src
+
+  vis: 0
+  infer: 1
+  valid: 0
+  train: 0
+  resume:  # path to converged policy
+
+environment:
+  environment: CoppeliaSimEnvWrapper
+
+agents:
+  actor:
+    agent: UR5Actor
+
+    state_net_params:  # state -> hidden representation
+      image_net_params:
+        history_len: 1
+        channels: [16, 32, 32, 32, 16]
+        use_bias: True
+        use_groups: False
+        use_normalization: True
+        use_dropout: False
+        activation: ReLU
+      main_net_params:
+        features: [256, 256]
+        use_bias: False
+        use_normalization: False
+        use_dropout: False
+        activation: ReLU
+    policy_head_params:  # hidden representation -> ~policy
+      in_features: 256
+      # out features would be taken from action_shape
+      policy_type: null
+      out_activation: Tanh
+
+  critic:
+    agent: UR5StateActionCritic
+
+    state_action_net_params:  # state -> hidden representation
+      image_net_params:
+        history_len: 1
+        channels: [16, 32, 32, 32, 16]
+        use_bias: True
+        use_groups: False
+        use_normalization: True
+        use_dropout: False
+        activation: ReLU
+      action_net_params:
+        features: [64, 64]
+        use_bias: False
+        use_normalization: False
+        use_dropout: False
+        activation: ReLU
+      main_net_params:
+        features: [256, 256]
+        use_bias: False
+        use_normalization: False
+        use_dropout: False
+        activation: ReLU
+    value_head_params:  # hidden representation -> value
+      in_features: 256
+      out_features: 1
+
+
+algorithm:
+  algorithm: TD3
+
+  n_step: 1
+  gamma: 0.99
+  actor_tau: 0.01
+  critic_tau: 0.01
+
+  num_critics: 2
+  action_noise_std: 0.1
+  action_noise_clip: 0.5
+
+  critic_loss_params:
+    criterion: HuberLoss
+    clip_delta: 1.0
+
+  actor_optimizer_params:
+    optimizer: Adam
+    lr: 0.0003
+  critic_optimizer_params:
+    optimizer: Adam
+    lr: 0.0003
+
+  actor_grad_clip_params:
+    func: clip_grad_value_
+    clip_value: 1.0
+
+sampler:
+  weights_sync_period: 1
+
+  exploration_params:
+    - exploration: GaussNoise
+      probability: 0.9
+      sigma: 0.1
+
+    - exploration: NoExploration
+      probability: 0.1
