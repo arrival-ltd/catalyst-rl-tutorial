@@ -265,8 +265,9 @@ Once the policy converges, you can either test it (run inference) in the simulat
 
 ## About the Team
 <p align="center">
-  <img src="https://lever-client-logos.s3-us-west-2.amazonaws.com/611c87f6-a121-4687-86de-9059cd87a4e4-1584284823172.png" alt="Sublime's custom image"/>
+  <img src="./images/logo.png" alt="Sublime's custom image"/>
 </p>
+
 
 This tutorial is based on the research done at [ARRIVAL](https://arrival.com/?gclid=CjwKCAjwnef6BRAgEiwAgv8mQby9ldRbN6itD_fEpRZ2TdgFBeKltK-EPSVPNUhvdoH2s8PnNAYMLxoC5OAQAvD_BwE) by the outstanding robotics team: 
 * [Damian Bogunowicz](https://dtransposed.github.io)
